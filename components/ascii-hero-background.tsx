@@ -192,34 +192,10 @@ export function AsciiHeroBackground() {
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
-      style={{
-        maskImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.68) 24%, rgba(0, 0, 0, 0.9) 55%, black 100%)",
-        WebkitMaskImage:
-          "linear-gradient(90deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.68) 24%, rgba(0, 0, 0, 0.9) 55%, black 100%)",
-      }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "radial-gradient(circle at 72% 46%, rgba(16, 185, 129, 0.18), transparent 42%)",
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(250, 250, 250, 0.9) 0%, rgba(250, 250, 250, 0.76) 34%, rgba(250, 250, 250, 0.34) 54%, rgba(250, 250, 250, 0.08) 100%)",
-        }}
-      />
       <pre
         ref={preRef}
         className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-4 pt-8 text-[10px] leading-[0.78] tracking-[-0.06em] text-black sm:block md:px-6 md:text-[11px] lg:text-[12px]"
-      />
-      <div
-        className="absolute inset-y-0 left-0 w-[34%]"
-        style={{
-          background: "linear-gradient(90deg, rgba(250, 250, 250, 0.38) 0%, rgba(250, 250, 250, 0.14) 62%, transparent 100%)",
-        }}
       />
     </div>
   );
