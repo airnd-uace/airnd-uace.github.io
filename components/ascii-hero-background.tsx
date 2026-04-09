@@ -158,24 +158,24 @@ export function AsciiHeroBackground() {
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(circle at 72% 46%, rgba(16, 185, 129, 0.14), transparent 34%)",
+          background: "radial-gradient(circle at 72% 46%, rgba(16, 185, 129, 0.34), transparent 34%)",
         }}
       />
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(90deg, rgba(250, 250, 250, 0.98) 0%, rgba(250, 250, 250, 0.94) 36%, rgba(250, 250, 250, 0.72) 58%, rgba(250, 250, 250, 0.24) 100%)",
+            "linear-gradient(90deg, rgba(250, 250, 250, 0.9) 0%, rgba(250, 250, 250, 0.76) 34%, rgba(250, 250, 250, 0.34) 54%, rgba(250, 250, 250, 0.08) 100%)",
         }}
       />
       <pre
         ref={preRef}
-        className="absolute inset-y-0 right-[-6%] m-0 hidden h-full w-[76%] overflow-hidden whitespace-pre pt-8 text-[10px] leading-[0.78] tracking-[-0.06em] text-emerald-800/70 sm:block md:text-[11px] lg:text-[12px]"
+        className="absolute inset-y-0 right-[-6%] m-0 hidden h-full w-[76%] overflow-hidden whitespace-pre pt-8 text-[10px] leading-[0.78] tracking-[-0.06em] text-black sm:block md:text-[11px] lg:text-[12px]"
       />
       <div
         className="absolute inset-y-0 right-0 w-40"
         style={{
-          background: "linear-gradient(90deg, transparent 0%, rgba(250, 250, 250, 0.8) 100%)",
+          background: "linear-gradient(90deg, transparent 0%, rgba(250, 250, 250, 0.5) 100%)",
         }}
       />
     </div>
