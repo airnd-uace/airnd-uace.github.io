@@ -211,58 +211,60 @@ export default function Page() {
 
         <div className="max-w-5xl mx-auto px-6">
           {/* HERO */}
-          <section className="relative isolate flex min-h-[calc(100vh-3.5rem)] flex-col justify-center overflow-hidden rounded-[2rem] py-12 md:py-16">
+          <section className="relative left-1/2 isolate flex min-h-[calc(100vh-3.5rem)] w-screen -translate-x-1/2 flex-col justify-center overflow-hidden rounded-none py-12 md:py-16 md:rounded-[2rem]">
             <AsciiHeroBackground />
             <div
-              className="absolute inset-0 rounded-[2rem] border border-neutral-200/80 shadow-sm"
+              className="absolute inset-0 rounded-none border border-neutral-200/80 shadow-sm md:rounded-[2rem]"
               style={{
                 background: "linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(250, 250, 250, 0.86) 100%)",
                 boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.7)",
               }}
             />
             <div
-              className="absolute inset-0 rounded-[2rem]"
+              className="absolute inset-0 rounded-none md:rounded-[2rem]"
               style={{
                 background: "radial-gradient(circle at 76% 34%, rgba(16, 185, 129, 0.12), transparent 30%)",
               }}
             />
-            <div className="relative z-10 space-y-8 px-8 py-10 md:max-w-3xl md:px-12 md:py-14">
-              <div className="space-y-2">
-                <Badge variant="outline" className="border-emerald-500/40 text-emerald-600 text-[11px] bg-emerald-500/10 mb-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse inline-block" />
-                  {t.hero.badge}
-                </Badge>
-                <h1 className="text-6xl md:text-7xl font-bold tracking-tight leading-[1.05] text-neutral-900">
-                  {t.hero.title1}
-                  <br />
-                  <span className="text-neutral-600">{t.hero.title2}</span>
-                </h1>
-              </div>
-              <p className="text-lg text-neutral-600 max-w-xl leading-relaxed">
-                {t.hero.tagline}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Button className="bg-neutral-900 text-white hover:bg-neutral-800 gap-2 font-medium" asChild>
-                  <Link href="/research">
-                    {t.hero.viewResearch} <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-                <Button variant="outline" className="border-neutral-300 text-neutral-700 hover:text-neutral-900 hover:border-neutral-500" asChild>
-                  <a href="#contact">{t.hero.joinUs}</a>
-                </Button>
-              </div>
+            <div className="relative z-10 mx-auto w-full max-w-5xl px-6 py-10 md:py-14">
+              <div className="space-y-8 md:max-w-3xl">
+                <div className="space-y-2">
+                  <Badge variant="outline" className="border-emerald-500/40 text-emerald-600 text-[11px] bg-emerald-500/10 mb-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse inline-block" />
+                    {t.hero.badge}
+                  </Badge>
+                  <h1 className="text-6xl md:text-7xl font-bold tracking-tight leading-[1.05] text-neutral-900">
+                    {t.hero.title1}
+                    <br />
+                    <span className="text-neutral-600">{t.hero.title2}</span>
+                  </h1>
+                </div>
+                <p className="text-lg text-neutral-600 max-w-xl leading-relaxed">
+                  {t.hero.tagline}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button className="bg-neutral-900 text-white hover:bg-neutral-800 gap-2 font-medium" asChild>
+                    <Link href="/research">
+                      {t.hero.viewResearch} <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="border-neutral-300 text-neutral-700 hover:text-neutral-900 hover:border-neutral-500" asChild>
+                    <a href="#contact">{t.hero.joinUs}</a>
+                  </Button>
+                </div>
 
-              <div className="flex flex-wrap gap-8 pt-4">
-                {[
-                  { label: t.stats.researchPapers, value: "12+" },
-                  { label: t.stats.activeMembers, value: "11" },
-                  { label: t.stats.strategiesTested, value: "40+" },
-                ].map(({ label, value }) => (
-                  <div key={label}>
-                    <p className="text-2xl font-bold text-neutral-900">{value}</p>
-                    <p className="text-xs text-neutral-500 mt-0.5">{label}</p>
-                  </div>
-                ))}
+                <div className="flex flex-wrap gap-8 pt-4">
+                  {[
+                    { label: t.stats.researchPapers, value: "12+" },
+                    { label: t.stats.activeMembers, value: "11" },
+                    { label: t.stats.strategiesTested, value: "40+" },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <p className="text-2xl font-bold text-neutral-900">{value}</p>
+                      <p className="text-xs text-neutral-500 mt-0.5">{label}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
