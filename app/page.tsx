@@ -298,9 +298,12 @@ export default function Page() {
             <h2 className="text-3xl font-bold text-neutral-900">{t.team.title}</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {members.map(({ slug, name, roleKey, focusKey, initials, email, linkedin }) => (
-                <Link key={name} href={`/team/${slug}`} className="block">
-                  <Card className="bg-white border-neutral-200 hover:border-neutral-400 transition-all group shadow-sm h-full">
-                    <CardContent className="p-6 space-y-4">
+                <Card key={name} className="bg-white border-neutral-200 hover:border-neutral-400 transition-all group shadow-sm h-full flex flex-col">
+                  <CardContent className="p-6 flex flex-col gap-4 flex-1">
+                    <Link
+                      href={`/team/${slug}`}
+                      className="block -m-2 p-2 rounded-lg hover:bg-neutral-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
+                    >
                       <div className="flex items-center gap-3">
                         <Avatar className="w-9 h-9 border border-neutral-200">
                           <AvatarFallback className="bg-neutral-100 text-neutral-600 text-xs font-medium">
@@ -312,51 +315,49 @@ export default function Page() {
                           <p className="text-xs text-neutral-600">{t.roles[roleKey]}</p>
                         </div>
                       </div>
-                      <Separator className="bg-neutral-200" />
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-neutral-600">{t.focus[focusKey]}</span>
-                        <div className="flex gap-1" onClick={(e) => e.preventDefault()}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <a href={linkedin} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
-                                  <Linkedin className="w-3.5 h-3.5" />
-                                </Button>
-                              </a>
-                            </TooltipTrigger>
-                            <TooltipContent>LinkedIn</TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <a href={`mailto:${email}`} onClick={(e) => e.stopPropagation()}>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
-                                  <Mail className="w-3.5 h-3.5" />
-                                </Button>
-                              </a>
-                            </TooltipTrigger>
-                            <TooltipContent>{email}</TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
-                                <Github className="w-3.5 h-3.5" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>GitHub</TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
-                                <Twitter className="w-3.5 h-3.5" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Twitter</TooltipContent>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      <Separator className="bg-neutral-200 my-4" />
+                      <p className="text-xs text-neutral-600 text-left">{t.focus[focusKey]}</p>
+                    </Link>
+                    <div className="flex justify-end gap-1 pt-1 border-t border-neutral-100">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900" asChild>
+                            <a href={linkedin} target="_blank" rel="noreferrer">
+                              <Linkedin className="w-3.5 h-3.5" />
+                            </a>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>LinkedIn</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900" asChild>
+                            <a href={`mailto:${email}`}>
+                              <Mail className="w-3.5 h-3.5" />
+                            </a>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{email}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
+                            <Github className="w-3.5 h-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>GitHub</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-neutral-500 hover:text-neutral-900">
+                            <Twitter className="w-3.5 h-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Twitter</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
 
