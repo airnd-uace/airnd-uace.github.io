@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,14 +22,31 @@ export function ResearchCard({
   tags,
   date,
   readLabel,
+  href,
 }: {
   title: string;
   desc: string;
-  tags: string[];
+  tags: readonly string[];
   date: string;
   readLabel: string;
+  /** When set, the whole card links to this URL (blog-style detail). */
+  href?: string;
 }) {
-  return (
+  const cta = href ? (
+    <span className="inline-flex items-center gap-1 text-xs text-neutral-600 group-hover:text-neutral-900">
+      {readLabel} <ChevronRight className="w-3 h-3" />
+    </span>
+  ) : (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="text-neutral-600 hover:text-neutral-900 p-0 h-auto gap-1 text-xs"
+    >
+      {readLabel} <ChevronRight className="w-3 h-3" />
+    </Button>
+  );
+
+  const card = (
     <Card className="h-full bg-white border-neutral-200 hover:border-neutral-400 transition-all duration-300 group shadow-sm">
       <CardContent className="p-6 h-full flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
@@ -50,17 +68,21 @@ export function ResearchCard({
               </Badge>
             ))}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-neutral-600 hover:text-neutral-900 p-0 h-auto gap-1 text-xs"
-          >
-            {readLabel} <ChevronRight className="w-3 h-3" />
-          </Button>
+          {cta}
         </div>
       </CardContent>
     </Card>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block h-full">
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }
 
 export function CarouselWithDots({ children, itemCount }: { children: React.ReactNode; itemCount: number }) {

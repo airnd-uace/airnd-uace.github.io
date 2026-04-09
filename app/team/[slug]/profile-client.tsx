@@ -24,19 +24,9 @@ import {
 import { ResearchCard } from "@/components/research-card";
 import { LOCALE_KEY } from "@/lib/constants";
 import type { Member } from "@/lib/members";
-import { allProjects } from "@/lib/projects";
+import { allProjects, projectHref } from "@/lib/projects";
+import { getResearchMeta, researchPostHref } from "@/lib/research-items";
 import { translations, type Locale } from "@/lib/translations";
-
-const researchData: Record<string, { tags: string[]; date: string }> = {
-  volatility: { tags: ["Crypto", "Volatility", "ML"], date: "Mar 2025" },
-  momentum: { tags: ["Equities", "Factor", "Macro"], date: "Jan 2025" },
-  microstructure: { tags: ["HFT", "Microstructure"], date: "Nov 2024" },
-  regime: { tags: ["Crypto", "ML"], date: "Sep 2024" },
-  correlation: { tags: ["Equities", "Macro"], date: "Jul 2024" },
-  marketMaking: { tags: ["HFT", "Microstructure"], date: "May 2024" },
-  liquidityRisk: { tags: ["Equities", "Factor"], date: "Feb 2024" },
-  tailRisk: { tags: ["Crypto", "Volatility"], date: "Dec 2023" },
-};
 
 export function MemberProfileClient({ member }: { member: Member }) {
   const [locale, setLocale] = useState<Locale>("en");
@@ -192,7 +182,7 @@ export function MemberProfileClient({ member }: { member: Member }) {
               <div className="grid gap-4 md:grid-cols-2">
                 {member.papers.map((key) => {
                   const paper = t.researchPapers[key];
-                  const meta = researchData[key];
+                  const meta = getResearchMeta(key);
 
                   return (
                     <ResearchCard
@@ -202,6 +192,7 @@ export function MemberProfileClient({ member }: { member: Member }) {
                       tags={meta.tags}
                       date={meta.date}
                       readLabel={t.research.read}
+                      href={researchPostHref(key)}
                     />
                   );
                 })}
@@ -225,6 +216,7 @@ export function MemberProfileClient({ member }: { member: Member }) {
                     tags={project.tags}
                     date={project.date}
                     readLabel={locale === "en" ? "View" : "Ver"}
+                    href={projectHref(project)}
                   />
                 ))}
               </div>

@@ -180,3 +180,11 @@ export const members: Member[] = [
 export function getMemberBySlug(slug: string): Member | undefined {
   return members.find((m) => m.slug === slug);
 }
+
+export function membersForResearchKey(key: ResearchKey): Member[] {
+  return members.filter((m) => m.papers.includes(key));
+}
+
+export function membersForProjectTitle(title: string): Member[] {
+  return members.filter((m) => m.projects.includes(title));
+}

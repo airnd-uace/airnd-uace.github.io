@@ -35,35 +35,9 @@ import { CarouselItem } from "@/components/ui/carousel";
 import { ResearchCard, CarouselWithDots } from "@/components/research-card";
 import { translations, type Locale } from "@/lib/translations";
 import { members } from "@/lib/members";
-import { projectsByKey } from "@/lib/projects";
+import { projectsByKey, projectHref } from "@/lib/projects";
 import { LOCALE_KEY } from "@/lib/constants";
-
-const researchByKey = {
-  all: [
-    { key: "volatility" as const,    tags: ["Crypto", "Volatility", "ML"],       date: "Mar 2025" },
-    { key: "momentum" as const,      tags: ["Equities", "Factor", "Macro"],       date: "Jan 2025" },
-    { key: "microstructure" as const,tags: ["HFT", "Microstructure"],             date: "Nov 2024" },
-    { key: "regime" as const,        tags: ["Crypto", "ML"],                      date: "Sep 2024" },
-    { key: "correlation" as const,   tags: ["Equities", "Macro"],                 date: "Jul 2024" },
-    { key: "marketMaking" as const,  tags: ["HFT", "Microstructure"],             date: "May 2024" },
-    { key: "liquidityRisk" as const, tags: ["Equities", "Factor"],                date: "Feb 2024" },
-    { key: "tailRisk" as const,      tags: ["Crypto", "Volatility"],              date: "Dec 2023" },
-  ],
-  crypto: [
-    { key: "volatility" as const, tags: ["Crypto", "Volatility", "ML"], date: "Mar 2025" },
-    { key: "regime" as const,     tags: ["Crypto", "ML"],               date: "Sep 2024" },
-    { key: "tailRisk" as const,   tags: ["Crypto", "Volatility"],       date: "Dec 2023" },
-  ],
-  equities: [
-    { key: "momentum" as const,      tags: ["Equities", "Factor", "Macro"], date: "Jan 2025" },
-    { key: "correlation" as const,   tags: ["Equities", "Macro"],           date: "Jul 2024" },
-    { key: "liquidityRisk" as const, tags: ["Equities", "Factor"],          date: "Feb 2024" },
-  ],
-  hft: [
-    { key: "microstructure" as const, tags: ["HFT", "Microstructure"], date: "Nov 2024" },
-    { key: "marketMaking" as const,   tags: ["HFT", "Microstructure"], date: "May 2024" },
-  ],
-};
+import { researchByKey, researchPostHref } from "@/lib/research-items";
 
 export default function Page() {
   const [locale, setLocale] = useState<Locale>("en");
@@ -243,6 +217,7 @@ export default function Page() {
                           tags={r.tags}
                           date={r.date}
                           readLabel={t.research.read}
+                          href={researchPostHref(r.key)}
                         />
                       </CarouselItem>
                     ))}
@@ -282,6 +257,7 @@ export default function Page() {
                           tags={project.tags}
                           date={project.date}
                           readLabel="View"
+                          href={projectHref(project)}
                         />
                       </CarouselItem>
                     ))}
