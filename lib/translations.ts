@@ -1,0 +1,253 @@
+export type Locale = "en" | "es";
+
+export const translations = {
+  en: {
+    nav: {
+      research: "Research",
+      team: "Team",
+      philosophy: "Philosophy",
+      joinUs: "Join Us",
+    },
+    hero: {
+      badge: "Open Research Lab",
+      title1: "Alternative investments,",
+      title2: "Research and Development",
+      tagline:
+        "We design, test, and deploy quantitative strategies through experimentation, data, and rigorous thinking.",
+      viewResearch: "View Research",
+      joinUs: "Join Us",
+    },
+    stats: {
+      researchPapers: "Research Papers",
+      activeMembers: "Active Members",
+      strategiesTested: "Strategies Tested",
+    },
+    about: {
+      title: "About",
+      desc: "AIR&D is an independent, student-run quantitative research lab. We build systematic strategies, study market microstructure, and develop open infrastructure for financial research. Our work spans crypto, equities, and high-frequency data — driven by curiosity and a rigorous, experiment-first culture.",
+    },
+    focusAreas: {
+      title: "Focus Areas",
+      quantitative: "Quantitative Strategies",
+      quantitativeDesc: "Systematic alpha generation across asset classes.",
+      microstructure: "Market Microstructure",
+      microstructureDesc: "Order flow, execution, and price impact research.",
+      backtesting: "Backtesting & Data Engineering",
+      backtestingDesc: "Rigorous simulation with clean, reproducible pipelines.",
+      macro: "Macro & Thematic Research",
+      macroDesc: "Top-down frameworks for regime identification.",
+    },
+    research: {
+      title: "Research",
+      allPapers: "All papers",
+      all: "All",
+      crypto: "Crypto",
+      equities: "Equities",
+      hft: "HFT",
+      read: "Read",
+    },
+    researchPapers: {
+      volatility: {
+        title: "Volatility Clustering in Crypto Markets",
+        desc: "Detecting regime shifts using statistical models and time series analysis.",
+      },
+      momentum: {
+        title: "Momentum Factor Decay Post-2020",
+        desc: "Examining the structural breakdown of cross-sectional momentum in US equities.",
+      },
+      microstructure: {
+        title: "Microstructure Signals in Order Books",
+        desc: "High-frequency features extracted from L2 data to predict short-term price moves.",
+      },
+      regime: {
+        title: "Crypto Regime Detection via Hidden Markov Models",
+        desc: "Unsupervised regime labeling for bull, bear, and sideways markets using HMMs on OHLCV data.",
+      },
+      correlation: {
+        title: "Cross-Asset Correlation Breakdown During Stress",
+        desc: "Documenting how equity-bond and crypto-equity correlations shift during macro stress events.",
+      },
+      marketMaking: {
+        title: "Adaptive Market Making with Inventory Constraints",
+        desc: "A reinforcement learning approach to quote sizing under adverse selection and inventory risk.",
+      },
+      liquidityRisk: {
+        title: "Liquidity-Adjusted Factor Returns",
+        desc: "Decomposing factor premia into compensation for liquidity provision versus informational edge.",
+      },
+      tailRisk: {
+        title: "Tail Risk Hedging in Crypto Derivatives",
+        desc: "Evaluating options-based overlays for downside protection in asymmetric return distributions.",
+      },
+    },
+    team: {
+      title: "Team",
+      alumni: "Alumni",
+      alumniDesc: "Past members now at leading institutions, funds, and graduate programs.",
+      view: "View",
+    },
+    roles: {
+      quantResearcher: "Quant Researcher",
+      dataEngineer: "Data Engineer",
+      macroAnalyst: "Macro Analyst",
+      portfolioManager: "Portfolio Manager",
+      riskAnalyst: "Risk Analyst",
+      researchAnalyst: "Research Analyst",
+    },
+    focus: {
+      volatilityModels: "Volatility Models",
+      pipelineInfra: "Pipeline & Infra",
+      globalMacro: "Global Macro",
+      factorModels: "Factor Models",
+      alternativeStrategies: "Alternative Strategies",
+      varStress: "VaR & Stress Testing",
+      marketMicrostructure: "Market Microstructure",
+      researchInfra: "Research Infrastructure",
+      regimeId: "Regime Identification",
+      backtesting: "Backtesting & Simulation",
+      thematic: "Thematic Research",
+    },
+    philosophy: {
+      build: "We learn by building.",
+      buildSub: "Every idea becomes an experiment.",
+      rigor: "Rigor over opinion.",
+      rigorSub: "Data is the final word.",
+      ship: "Ship experiments.",
+      shipSub: "Not decks. Not ideas. Results.",
+    },
+    contact: {
+      title: "Join Us",
+      desc: "We're always looking for curious, rigorous people. Get in touch.",
+      applyNow: "Apply Now",
+      contact: "Contact",
+    },
+    footer: {
+      company: "Alternative investments, Research and Development",
+    },
+  },
+  es: {
+    nav: {
+      research: "Investigación",
+      team: "Equipo",
+      philosophy: "Filosofía",
+      joinUs: "Únete",
+    },
+    hero: {
+      badge: "Laboratorio de Investigación Abierto",
+      title1: "Inversiones alternativas,",
+      title2: "Investigación y Desarrollo",
+      tagline:
+        "Diseñamos, probamos e implementamos estrategias cuantitativas mediante experimentación, datos y pensamiento riguroso.",
+      viewResearch: "Ver Investigación",
+      joinUs: "Únete",
+    },
+    stats: {
+      researchPapers: "Documentos de Investigación",
+      activeMembers: "Miembros Activos",
+      strategiesTested: "Estrategias Probadas",
+    },
+    about: {
+      title: "Sobre Nosotros",
+      desc: "AIR&D es un laboratorio de investigación cuantitativa independiente, dirigido por estudiantes. Construimos estrategias sistemáticas, estudiamos la microestructura de mercados y desarrollamos infraestructura abierta para la investigación financiera. Nuestro trabajo abarca cripto, acciones y datos de alta frecuencia, impulsado por la curiosidad y una cultura rigurosa basada en la experimentación.",
+    },
+    focusAreas: {
+      title: "Áreas de Enfoque",
+      quantitative: "Estrategias Cuantitativas",
+      quantitativeDesc: "Generación sistemática de alpha en todas las clases de activos.",
+      microstructure: "Microestructura de Mercados",
+      microstructureDesc: "Flujo de órdenes, ejecución e investigación de impacto en precios.",
+      backtesting: "Backtesting e Ingeniería de Datos",
+      backtestingDesc: "Simulación rigurosa con pipelines limpios y reproducibles.",
+      macro: "Investigación Macro y Temática",
+      macroDesc: "Marcos de arriba hacia abajo para identificación de regímenes.",
+    },
+    research: {
+      title: "Investigación",
+      allPapers: "Todos los papers",
+      all: "Todos",
+      crypto: "Crypto",
+      equities: "Acciones",
+      hft: "HFT",
+      read: "Leer",
+    },
+    researchPapers: {
+      volatility: {
+        title: "Clustering de Volatilidad en Mercados Crypto",
+        desc: "Detección de cambios de régimen usando modelos estadísticos y análisis de series temporales.",
+      },
+      momentum: {
+        title: "Decaimiento del Factor Momentum Post-2020",
+        desc: "Examen de la ruptura estructural del momentum cross-sectional en acciones estadounidenses.",
+      },
+      microstructure: {
+        title: "Señales de Microestructura en Libros de Órdenes",
+        desc: "Características de alta frecuencia extraídas de datos L2 para predecir movimientos de precios a corto plazo.",
+      },
+      regime: {
+        title: "Detección de Regímenes Crypto con Modelos de Markov Ocultos",
+        desc: "Etiquetado no supervisado de regímenes alcistas, bajistas y laterales usando HMMs sobre datos OHLCV.",
+      },
+      correlation: {
+        title: "Ruptura de Correlación entre Activos en Periodos de Estrés",
+        desc: "Documentando cómo las correlaciones acciones-bonos y crypto-acciones cambian en eventos macro extremos.",
+      },
+      marketMaking: {
+        title: "Market Making Adaptativo con Restricciones de Inventario",
+        desc: "Un enfoque de aprendizaje por refuerzo para dimensionar cotizaciones bajo selección adversa y riesgo de inventario.",
+      },
+      liquidityRisk: {
+        title: "Retornos de Factores Ajustados por Liquidez",
+        desc: "Descomponiendo las primas de factores en compensación por provisión de liquidez versus ventaja informacional.",
+      },
+      tailRisk: {
+        title: "Cobertura de Riesgo de Cola en Derivados Crypto",
+        desc: "Evaluando overlays de opciones para protección bajista en distribuciones de retorno asimétricas.",
+      },
+    },
+    team: {
+      title: "Equipo",
+      alumni: "Egresados",
+      alumniDesc:
+        "Ex miembros ahora en instituciones líderes, fondos y programas de posgrado.",
+      view: "Ver",
+    },
+    roles: {
+      quantResearcher: "Investigador Cuant",
+      dataEngineer: "Ingeniero de Datos",
+      macroAnalyst: "Analista Macro",
+      portfolioManager: "Portfolio Manager",
+      riskAnalyst: "Analista de Riesgo",
+      researchAnalyst: "Analista de Investigación",
+    },
+    focus: {
+      volatilityModels: "Modelos de Volatilidad",
+      pipelineInfra: "Pipeline e Infra",
+      globalMacro: "Macro Global",
+      factorModels: "Modelos de Factores",
+      alternativeStrategies: "Estrategias Alternativas",
+      varStress: "VaR y Stress Testing",
+      marketMicrostructure: "Microestructura de Mercados",
+      researchInfra: "Infraestructura de Investigación",
+      regimeId: "Identificación de Regímenes",
+      backtesting: "Backtesting y Simulación",
+      thematic: "Investigación Temática",
+    },
+    philosophy: {
+      build: "Aprendemos construyendo.",
+      buildSub: "Cada idea se convierte en un experimento.",
+      rigor: "Rigor sobre opinión.",
+      rigorSub: "Los datos tienen la última palabra.",
+      ship: "Lanzamos experimentos.",
+      shipSub: "No decks. No ideas. Resultados.",
+    },
+    contact: {
+      title: "Únete",
+      desc: "Siempre buscamos personas curiosas y rigurosas. Contáctanos.",
+      applyNow: "Aplicar Ahora",
+      contact: "Contacto",
+    },
+    footer: {
+      company: "Inversiones alternativas, Investigación y Desarrollo",
+    },
+  },
+} as const;
