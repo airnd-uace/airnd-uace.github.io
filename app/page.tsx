@@ -217,14 +217,14 @@ export default function Page() {
             <div
               className="absolute inset-0 rounded-none border border-neutral-200/80 shadow-sm md:rounded-[2rem]"
               style={{
-                background: "linear-gradient(180deg, rgba(255, 243, 214, 0.96) 0%, rgba(255, 222, 163, 0.94) 100%)",
+                background: "linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(250, 250, 250, 0.9) 100%)",
                 boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.7)",
               }}
             />
             <div
               className="absolute inset-0 rounded-none md:rounded-[2rem]"
               style={{
-                background: "radial-gradient(circle at 76% 34%, rgba(249, 115, 22, 0.22), transparent 30%)",
+                background: "none",
               }}
             />
             <div className="relative z-10 mx-auto w-full max-w-5xl px-6 py-10 md:py-14">

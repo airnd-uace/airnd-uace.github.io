@@ -81,7 +81,7 @@ function renderFrame(cols: number, rows: number, time: number, charAspect: numbe
       const value = clamp((1 - Math.exp(-3 * Math.abs(distance))) * band, 0, 1);
       const index = Math.floor(value * (DENSITY.length - 1));
       const char = DENSITY[index];
-      const color = band === 0 ? "orangered" : "royalblue";
+      const color = band === 0 ? "#8ec5ff" : "#2563eb";
 
       if (currentColor && color !== currentColor) {
         output += `<span style="color:${currentColor}">${run}</span>`;
