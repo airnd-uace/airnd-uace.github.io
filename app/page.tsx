@@ -47,6 +47,7 @@ import { CarouselItem } from "@/components/ui/carousel";
 import { ResearchCard, CarouselWithDots } from "@/components/research-card";
 import { AsciiHeroBackground } from "@/components/ascii-hero-background";
 import { SearchCommand } from "@/components/search-command";
+import { SiteFooter } from "@/components/site-footer";
 import { useInView } from "@/hooks/use-in-view";
 import { translations, type Locale } from "@/lib/translations";
 import { members } from "@/lib/members";
@@ -216,14 +217,14 @@ export default function Page() {
             <div
               className="absolute inset-0 rounded-none border border-neutral-200/80 shadow-sm md:rounded-[2rem]"
               style={{
-                background: "linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(250, 250, 250, 0.86) 100%)",
+                background: "linear-gradient(180deg, rgba(255, 243, 214, 0.96) 0%, rgba(255, 222, 163, 0.94) 100%)",
                 boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.7)",
               }}
             />
             <div
               className="absolute inset-0 rounded-none md:rounded-[2rem]"
               style={{
-                background: "radial-gradient(circle at 76% 34%, rgba(16, 185, 129, 0.12), transparent 30%)",
+                background: "radial-gradient(circle at 76% 34%, rgba(249, 115, 22, 0.22), transparent 30%)",
               }}
             />
             <div className="relative z-10 mx-auto w-full max-w-5xl px-6 py-10 md:py-14">
@@ -643,52 +644,7 @@ export default function Page() {
           </AnimatedSection>
         </div>
 
-        {/* FOOTER */}
-        <footer className="border-t border-neutral-200 mt-4 bg-white">
-          <div className="max-w-5xl mx-auto px-6 py-12">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-600" />
-                  <span className="text-sm font-semibold tracking-tight text-neutral-900">AIR&D</span>
-                </div>
-                <p className="text-xs text-neutral-500 leading-relaxed">{t.footer.tagline}</p>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.quickLinks}</p>
-                <div className="flex flex-col gap-2">
-                  <a href="#about" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">{t.about.title}</a>
-                  <Link href="/research" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">{t.nav.research}</Link>
-                  <Link href="/projects" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">{t.nav.projects}</Link>
-                  <a href="#team" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">{t.nav.team}</a>
-                  <Link href="/news" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">{t.news.title}</Link>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.social}</p>
-                <div className="flex flex-col gap-2">
-                  <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Linkedin className="h-3.5 w-3.5" /> LinkedIn
-                  </a>
-                  <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Instagram className="h-3.5 w-3.5" /> Instagram
-                  </a>
-                  <a href="https://github.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Github className="h-3.5 w-3.5" /> GitHub
-                  </a>
-                  <a href="https://twitter.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Twitter className="h-3.5 w-3.5" /> Twitter
-                  </a>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.legal}</p>
-                <p className="text-xs text-neutral-500">&copy; {new Date().getFullYear()} AIR&D</p>
-                <p className="text-xs text-neutral-500">{t.footer.copyright}</p>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter locale={locale} className="mt-4" />
       </main>
     </TooltipProvider>
   );

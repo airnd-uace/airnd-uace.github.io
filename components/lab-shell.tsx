@@ -10,7 +10,8 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
-import { Activity, Github, Instagram, Linkedin, Menu, Search, Twitter } from "lucide-react";
+import { Activity, Menu, Search } from "lucide-react";
+import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -195,51 +196,7 @@ export function LabShell({
 
         <div className={cn("mx-auto px-6 py-12", mainClassName ?? "max-w-5xl")}>{children}</div>
 
-        <footer className="border-t border-neutral-200 bg-white">
-          <div className="mx-auto max-w-5xl px-6 py-12">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="space-y-3">
-                <Link href="/" className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-semibold tracking-tight text-neutral-900">AIR&D</span>
-                </Link>
-                <p className="text-xs text-neutral-500 leading-relaxed">{t.footer.tagline}</p>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.quickLinks}</p>
-                <div className="flex flex-col gap-2">
-                  {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.social}</p>
-                <div className="flex flex-col gap-2">
-                  <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Linkedin className="h-3.5 w-3.5" /> LinkedIn
-                  </a>
-                  <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Instagram className="h-3.5 w-3.5" /> Instagram
-                  </a>
-                  <a href="https://github.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Github className="h-3.5 w-3.5" /> GitHub
-                  </a>
-                  <a href="https://twitter.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                    <Twitter className="h-3.5 w-3.5" /> Twitter
-                  </a>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">{t.footer.legal}</p>
-                <p className="text-xs text-neutral-500">&copy; {new Date().getFullYear()} AIR&D</p>
-                <p className="text-xs text-neutral-500">{t.footer.copyright}</p>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter locale={locale} />
       </main>
     </LabShellContext.Provider>
   );

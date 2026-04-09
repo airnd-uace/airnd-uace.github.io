@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Activity } from "lucide-react";
+import { SiteFooter } from "@/components/site-footer";
 
 export default function NotFound() {
   return (
@@ -33,17 +34,7 @@ export default function NotFound() {
           </Link>
         </main>
 
-        <footer className="border-t border-neutral-200 bg-white">
-          <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-            <div className="flex items-center gap-2">
-              <Activity className="h-3.5 w-3.5 text-emerald-600" />
-              <span className="text-xs text-neutral-600">
-                Alternative investments, Research and Development
-              </span>
-            </div>
-            <p className="text-xs text-neutral-500">&copy; 2025</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

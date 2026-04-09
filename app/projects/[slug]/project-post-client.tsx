@@ -11,6 +11,7 @@ import { LOCALE_KEY, tagColor } from "@/lib/constants";
 import type { Project } from "@/lib/projects";
 import { membersForProjectTitle } from "@/lib/members";
 import { translations, type Locale } from "@/lib/translations";
+import { SiteFooter } from "@/components/site-footer";
 
 export function ProjectPostClient({ project }: { project: Project }) {
   const [locale, setLocale] = useState<Locale>("en");
@@ -134,15 +135,7 @@ export function ProjectPostClient({ project }: { project: Project }) {
         </div>
       </article>
 
-      <footer className="mt-4 border-t border-neutral-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2">
-            <Activity className="h-3.5 w-3.5 text-emerald-600" />
-            <span className="text-xs text-neutral-600">{t.footer.company}</span>
-          </Link>
-          <p className="text-xs text-neutral-500">© 2025</p>
-        </div>
-      </footer>
+      <SiteFooter locale={locale} className="mt-4" />
     </main>
   );
 }

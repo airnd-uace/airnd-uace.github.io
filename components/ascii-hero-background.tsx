@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const DENSITY = "  .:-=+*#%@";
+const DENSITY = "▀▄▚▐─═0123.+?";
 const TARGET_FPS = 20;
 
 function clamp(value: number, min: number, max: number) {
@@ -11,6 +11,21 @@ function clamp(value: number, min: number, max: number) {
 
 function fract(value: number) {
   return value - Math.floor(value);
+}
+
+function mapRange(
+  value: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number,
+) {
+  if (inMax === inMin) {
+    return outMin;
+  }
+
+  const t = (value - inMin) / (inMax - inMin);
+  return outMin + (outMax - outMin) * t;
 }
 
 function smoothstep(edge0: number, edge1: number, x: number) {
@@ -28,41 +43,57 @@ function rotate(x: number, y: number, angle: number) {
   };
 }
 
-function renderFrame(cols: number, rows: number, time: number) {
+function sdCircle(x: number, y: number, radius: number) {
+  return Math.hypot(x, y) - radius;
+}
+
+function renderFrame(cols: number, rows: number, time: number, charAspect: number) {
   let output = "";
-  const aspect = cols / rows;
+  const minGrid = Math.min(cols, rows);
 
   for (let row = 0; row < rows; row += 1) {
+    let run = "";
+    let currentColor = "";
+
     for (let col = 0; col < cols; col += 1) {
-      const nx = ((col + 0.5) / cols - 0.5) * 2 * aspect;
-      const ny = ((row + 0.5) / rows - 0.5) * 2;
-      const radius = Math.hypot(nx, ny);
+      let st = {
+        x: (2 * (col - cols / 2) / minGrid) * charAspect,
+        y: (2 * (row - rows / 2)) / minGrid,
+      };
 
-      let point = rotate(
-        nx,
-        ny,
-        0.45 * Math.sin(time * 0.62 + radius * 2.6) * Math.min(radius, 1.35),
+      st = rotate(
+        st.x,
+        st.y,
+        0.6 * Math.sin(0.62 * time) * Math.hypot(st.x, st.y) * 2.5,
       );
-      point = rotate(point.x, point.y, time * 0.18);
+      st = rotate(st.x, st.y, time * 0.2);
 
-      const scale = 0.75 + 0.55 * ((Math.sin(time * 0.8) + 1) / 2);
-      const tileX = fract(point.x * scale + 1.5) - 0.5;
-      const tileY = fract(point.y * scale + 1.5) - 0.5;
-      const wobble = 0.26 + 0.18 * ((Math.sin(time * 0.7 + nx * 1.1) + 1) / 2);
-      const distance = Math.hypot(tileX, tileY) - wobble;
+      const scale = mapRange(Math.sin(time), -1, 1, 0.5, 1.8);
+      const point = {
+        x: fract(st.x * scale) - 0.5,
+        y: fract(st.y * scale) - 0.5,
+      };
 
-      const wave = Math.sin(10 * distance - time * 1.7);
-      const band = smoothstep(-0.22, 0.88, wave);
-      const centerFade = 1 - smoothstep(0.9, 1.7, radius);
-      const rightBias = smoothstep(-0.2, 1.1, nx);
-      const value = clamp(
-        (1 - Math.exp(-3 * Math.abs(distance))) * band * centerFade * (0.45 + 0.55 * rightBias),
-        0,
-        1,
-      );
-
+      const radius = 0.5 * Math.sin(0.5 * time + st.x * 0.2) + 0.5;
+      const distance = sdCircle(point.x, point.y, radius);
+      const width = 0.05 + 0.3 * Math.sin(time);
+      const band = smoothstep(width, width + 0.2, Math.sin(10 * distance + time));
+      const value = clamp((1 - Math.exp(-3 * Math.abs(distance))) * band, 0, 1);
       const index = Math.floor(value * (DENSITY.length - 1));
-      output += DENSITY[index];
+      const char = DENSITY[index];
+      const color = band === 0 ? "orangered" : "royalblue";
+
+      if (currentColor && color !== currentColor) {
+        output += `<span style="color:${currentColor}">${run}</span>`;
+        run = "";
+      }
+
+      currentColor = color;
+      run += char;
+    }
+
+    if (run) {
+      output += `<span style="color:${currentColor}">${run}</span>`;
     }
 
     output += "\n";
@@ -75,11 +106,12 @@ function measureGrid(element: HTMLElement) {
   const style = window.getComputedStyle(element);
   const fontSize = Number.parseFloat(style.fontSize) || 11;
   const lineHeight = Number.parseFloat(style.lineHeight) || fontSize * 0.9;
-  const charWidth = fontSize * 0.62;
+  const charWidth = fontSize * 0.5;
   const cols = Math.max(34, Math.floor(element.clientWidth / charWidth));
   const rows = Math.max(16, Math.floor(element.clientHeight / lineHeight));
+  const charAspect = charWidth / lineHeight;
 
-  return { cols, rows };
+  return { cols, rows, charAspect };
 }
 
 export function AsciiHeroBackground() {
@@ -104,12 +136,17 @@ export function AsciiHeroBackground() {
       }
 
       if (mediaQuery.matches) {
-        element.textContent = renderFrame(dims.cols, dims.rows, 1.6);
+        element.innerHTML = renderFrame(dims.cols, dims.rows, 1.6, dims.charAspect);
         return;
       }
 
       if (timestamp - lastFrame >= 1000 / TARGET_FPS) {
-        element.textContent = renderFrame(dims.cols, dims.rows, timestamp * 0.001);
+        element.innerHTML = renderFrame(
+          dims.cols,
+          dims.rows,
+          timestamp * 0.001,
+          dims.charAspect,
+        );
         lastFrame = timestamp;
       }
 
@@ -118,7 +155,12 @@ export function AsciiHeroBackground() {
 
     const handleResize = () => {
       dims = measureGrid(element);
-      element.textContent = renderFrame(dims.cols, dims.rows, lastFrame * 0.001);
+      element.innerHTML = renderFrame(
+        dims.cols,
+        dims.rows,
+        lastFrame * 0.001,
+        dims.charAspect,
+      );
     };
 
     resizeObserver = new ResizeObserver(handleResize);
@@ -149,16 +191,17 @@ export function AsciiHeroBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
       style={{
-        maskImage: "linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 38%, black 72%)",
-        WebkitMaskImage: "linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 38%, black 72%)",
+        maskImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.68) 24%, rgba(0, 0, 0, 0.9) 55%, black 100%)",
+        WebkitMaskImage:
+          "linear-gradient(90deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.68) 24%, rgba(0, 0, 0, 0.9) 55%, black 100%)",
       }}
     >
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(circle at 72% 46%, rgba(16, 185, 129, 0.34), transparent 34%)",
+          background: "radial-gradient(circle at 72% 46%, rgba(16, 185, 129, 0.18), transparent 42%)",
         }}
       />
       <div
@@ -170,12 +213,12 @@ export function AsciiHeroBackground() {
       />
       <pre
         ref={preRef}
-        className="absolute inset-y-0 right-[-6%] m-0 hidden h-full w-[76%] overflow-hidden whitespace-pre pt-8 text-[10px] leading-[0.78] tracking-[-0.06em] text-black sm:block md:text-[11px] lg:text-[12px]"
+        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-4 pt-8 text-[10px] leading-[0.78] tracking-[-0.06em] text-black sm:block md:px-6 md:text-[11px] lg:text-[12px]"
       />
       <div
-        className="absolute inset-y-0 right-0 w-40"
+        className="absolute inset-y-0 left-0 w-[34%]"
         style={{
-          background: "linear-gradient(90deg, transparent 0%, rgba(250, 250, 250, 0.5) 100%)",
+          background: "linear-gradient(90deg, rgba(250, 250, 250, 0.38) 0%, rgba(250, 250, 250, 0.14) 62%, transparent 100%)",
         }}
       />
     </div>

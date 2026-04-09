@@ -22,6 +22,7 @@ import {
   Activity,
 } from "lucide-react";
 import { ResearchCard } from "@/components/research-card";
+import { SiteFooter } from "@/components/site-footer";
 import { LOCALE_KEY } from "@/lib/constants";
 import type { Member } from "@/lib/members";
 import { allProjects, projectHref } from "@/lib/projects";
@@ -256,15 +257,7 @@ export function MemberProfileClient({ member }: { member: Member }) {
           </section>
         </div>
 
-        <footer className="mt-4 border-t border-neutral-200 bg-white">
-          <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Activity className="h-3.5 w-3.5 text-emerald-600" />
-              <span className="text-xs text-neutral-600">{t.footer.company}</span>
-            </Link>
-            <p className="text-xs text-neutral-500">© 2025</p>
-          </div>
-        </footer>
+        <SiteFooter locale={locale} className="mt-4" />
       </main>
     </TooltipProvider>
   );
