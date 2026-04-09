@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 const DENSITY = "▀▄▚▐─═0123.+?";
 const TARGET_FPS = 20;
+const INITIAL_FRAME_TIME = 1.6;
+const INITIAL_COLS = 96;
+const INITIAL_ROWS = 28;
+const INITIAL_CHAR_ASPECT = 0.52;
 
 const PALETTES = [
   // Previous palette:
   // { soft: "#8ec5ff", strong: "#2563eb" },
-  { soft: "#eef4fb", strong: "#d9e4f2" },
-  { soft: "#edf2f7", strong: "#d6dee8" },
-  { soft: "#f3f6fa", strong: "#dbe7f5" },
-  { soft: "#eef6ff", strong: "#d7e6f7" },
-  { soft: "#f5f7fa", strong: "#dde4ec" },
-  { soft: "#eef3f8", strong: "#d4dfeb" },
+  { color: "#d9e4f2" },
+  { color: "#d6dee8" },
+  { color: "#dbe7f5" },
+  { color: "#d7e6f7" },
+  { color: "#dde4ec" },
+  { color: "#d4dfeb" },
 ] as const;
 
 const PALETTE_CYCLE_SECONDS = 4;
@@ -66,13 +70,14 @@ function getPalette(time: number) {
 }
 
 function renderFrame(cols: number, rows: number, time: number, charAspect: number) {
-  let output = "";
   const minGrid = Math.min(cols, rows);
   const palette = getPalette(time);
+  const lines: string[] = [];
 
   for (let row = 0; row < rows; row += 1) {
     let run = "";
     let currentColor = "";
+    const segments: string[] = [];
 
     for (let col = 0; col < cols; col += 1) {
       let st = {
@@ -100,10 +105,10 @@ function renderFrame(cols: number, rows: number, time: number, charAspect: numbe
       const value = clamp((1 - Math.exp(-3 * Math.abs(distance))) * band, 0, 1);
       const index = Math.floor(value * (DENSITY.length - 1));
       const char = DENSITY[index];
-      const color = band === 0 ? palette.soft : palette.strong;
+      const color = palette.color;
 
       if (currentColor && color !== currentColor) {
-        output += `<span style="color:${currentColor}">${run}</span>`;
+        segments.push(`<span style="color:${currentColor}">${run}</span>`);
         run = "";
       }
 
@@ -112,14 +117,21 @@ function renderFrame(cols: number, rows: number, time: number, charAspect: numbe
     }
 
     if (run) {
-      output += `<span style="color:${currentColor}">${run}</span>`;
+      segments.push(`<span style="color:${currentColor}">${run}</span>`);
     }
 
-    output += "\n";
+    lines.push(segments.join(""));
   }
 
-  return output;
+  return lines.join("\n");
 }
+
+const INITIAL_FRAME_HTML = renderFrame(
+  INITIAL_COLS,
+  INITIAL_ROWS,
+  INITIAL_FRAME_TIME,
+  INITIAL_CHAR_ASPECT,
+);
 
 function measureGrid(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -136,7 +148,7 @@ function measureGrid(element: HTMLElement) {
 export function AsciiHeroBackground() {
   const preRef = useRef<HTMLPreElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = preRef.current;
 
     if (!element) {
@@ -147,48 +159,63 @@ export function AsciiHeroBackground() {
     let frameId = 0;
     let resizeObserver: ResizeObserver | null = null;
     let dims = measureGrid(element);
-    let lastFrame = 0;
+    let lastPaintAt = 0;
+    let lastSceneTime = INITIAL_FRAME_TIME;
+
+    const draw = (sceneTime: number) => {
+      element.innerHTML = renderFrame(
+        dims.cols,
+        dims.rows,
+        sceneTime,
+        dims.charAspect,
+      );
+      lastSceneTime = sceneTime;
+    };
 
     const paint = (timestamp: number) => {
       if (!element) {
         return;
       }
 
-      if (mediaQuery.matches) {
-        element.innerHTML = renderFrame(dims.cols, dims.rows, 1.6, dims.charAspect);
+      if (document.hidden) {
         return;
       }
 
-      if (timestamp - lastFrame >= 1000 / TARGET_FPS) {
-        element.innerHTML = renderFrame(
-          dims.cols,
-          dims.rows,
-          timestamp * 0.001,
-          dims.charAspect,
-        );
-        lastFrame = timestamp;
+      if (mediaQuery.matches) {
+        draw(INITIAL_FRAME_TIME);
+        return;
+      }
+
+      if (timestamp - lastPaintAt >= 1000 / TARGET_FPS) {
+        draw(timestamp * 0.001);
+        lastPaintAt = timestamp;
       }
 
       frameId = window.requestAnimationFrame(paint);
     };
 
     const handleResize = () => {
-      dims = measureGrid(element);
-      element.innerHTML = renderFrame(
-        dims.cols,
-        dims.rows,
-        lastFrame * 0.001,
-        dims.charAspect,
-      );
+      const nextDims = measureGrid(element);
+
+      if (
+        nextDims.cols === dims.cols &&
+        nextDims.rows === dims.rows &&
+        nextDims.charAspect === dims.charAspect
+      ) {
+        return;
+      }
+
+      dims = nextDims;
+      draw(lastSceneTime);
     };
 
     resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(element);
-    handleResize();
+    draw(lastSceneTime);
     frameId = window.requestAnimationFrame(paint);
 
     const handleMotionChange = () => {
-      handleResize();
+      draw(lastSceneTime);
 
       if (mediaQuery.matches) {
         window.cancelAnimationFrame(frameId);
@@ -198,12 +225,24 @@ export function AsciiHeroBackground() {
       frameId = window.requestAnimationFrame(paint);
     };
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(frameId);
+        return;
+      }
+
+      draw(lastSceneTime);
+      frameId = window.requestAnimationFrame(paint);
+    };
+
     mediaQuery.addEventListener("change", handleMotionChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       window.cancelAnimationFrame(frameId);
       resizeObserver?.disconnect();
       mediaQuery.removeEventListener("change", handleMotionChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
@@ -214,7 +253,9 @@ export function AsciiHeroBackground() {
     >
       <pre
         ref={preRef}
-        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-0 pt-0 text-[14px] leading-[0.84] tracking-[-0.03em] text-black sm:block md:text-[15px] lg:text-[16px]"
+        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-0 pt-0 text-[15px] leading-[0.86] tracking-[-0.02em] text-black sm:block md:text-[16px] lg:text-[17px]"
+        dangerouslySetInnerHTML={{ __html: INITIAL_FRAME_HTML }}
+        suppressHydrationWarning
       />
     </div>
   );
