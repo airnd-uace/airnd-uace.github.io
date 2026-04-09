@@ -214,7 +214,7 @@ export function AsciiHeroBackground() {
     >
       <pre
         ref={preRef}
-        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-4 pt-8 text-[13px] leading-[0.82] tracking-[-0.04em] text-black sm:block md:px-6 md:text-[14px] lg:text-[15px]"
+        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-0 pt-0 text-[13px] leading-[0.82] tracking-[-0.04em] text-black sm:block md:text-[14px] lg:text-[15px]"
       />
     </div>
   );

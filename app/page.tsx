@@ -212,7 +212,7 @@ export default function Page() {
 
         <div className="max-w-5xl mx-auto px-6">
           {/* HERO */}
-          <section className="relative left-1/2 isolate flex min-h-[calc(100vh-3.5rem)] w-screen -translate-x-1/2 flex-col justify-center overflow-hidden rounded-none py-12 md:py-16 md:rounded-[2rem]">
+          <section className="relative left-1/2 isolate flex min-h-[calc(100vh-3.5rem)] w-dvw -translate-x-1/2 flex-col justify-center overflow-hidden rounded-none py-12 md:py-16 md:rounded-[2rem]">
             <AsciiHeroBackground />
             <div
               className="absolute inset-0 rounded-none border border-neutral-200/80 shadow-sm md:rounded-[2rem]"
