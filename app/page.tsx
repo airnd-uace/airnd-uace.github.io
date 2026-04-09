@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,7 @@ import {
   Menu,
   Search,
   Twitter,
+  X,
   ExternalLink,
   Activity,
 } from "lucide-react";
@@ -82,9 +83,11 @@ function AnimatedSection({ children, className }: { children: ReactNode; classNa
 export default function Page() {
   const [shouldShowBoot, setShouldShowBoot] = useState(true);
   const [locale, setLocale] = useState<Locale>("en");
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
   const [bootDelayDone, setBootDelayDone] = useState(false);
+  const desktopMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem(LOCALE_KEY) as Locale | null;
@@ -114,8 +117,35 @@ export default function Page() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!desktopMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!desktopMenuRef.current?.contains(event.target as Node)) {
+        setDesktopMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [desktopMenuOpen]);
+
   const t = translations[locale];
   const showBootOverlay = shouldShowBoot && (!heroReady || !bootDelayDone);
+  const desktopMenuSurfaceClass = "border-b border-white/45 bg-white/44 backdrop-blur-[36px]";
 
   const toggleLocale = () => setLocale((l) => (l === "en" ? "es" : "en"));
 
@@ -123,12 +153,50 @@ export default function Page() {
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
   };
 
+  useEffect(() => {
+    if (!desktopMenuOpen) {
+      return;
+    }
+
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+    };
+  }, [desktopMenuOpen]);
+
   const navLinks = [
     { href: "#about", label: t.about.title },
     { href: "/research", label: t.nav.research, isRoute: true },
     { href: "/projects", label: t.nav.projects, isRoute: true },
+    { href: "#open-source", label: locale === "en" ? "Open Source" : "Open Source" },
+    { href: "#news", label: locale === "en" ? "News" : "Noticias" },
     { href: "#team", label: t.nav.team },
     { href: "#philosophy", label: t.nav.philosophy },
+    { href: "#contact", label: locale === "en" ? "Contact" : "Contacto" },
+  ];
+
+  const menuHighlights = [
+    {
+      eyebrow: locale === "en" ? "Latest Update" : "Actualización",
+      title: locale === "en" ? allNews[0].titleEn : allNews[0].titleEs,
+      body: locale === "en" ? allNews[0].bodyEn : allNews[0].bodyEs,
+      href: allNews[0].href ?? "#news",
+      isRoute: Boolean(allNews[0].href?.startsWith("/")),
+    },
+    {
+      eyebrow: locale === "en" ? "Open Source" : "Open Source",
+      title: locale === "en" ? openSourceItems[0].titleEn : openSourceItems[0].titleEs,
+      body: locale === "en" ? openSourceItems[0].descEn : openSourceItems[0].descEs,
+      href: openSourceItems[0].github,
+      isRoute: false,
+      external: true,
+    },
   ];
 
   return (
@@ -147,32 +215,31 @@ export default function Page() {
           <AsciiBootPreview />
         </div>
       </div>
+      <div
+        aria-hidden="true"
+        className={`fixed inset-x-0 top-0 z-[70] hidden h-[55vh] min-h-[24rem] max-h-[34rem] bg-white/12 backdrop-blur-[34px] transition-opacity duration-300 md:block ${
+          desktopMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
       <SearchCommand locale={locale} />
       <main className="min-h-screen bg-neutral-50 text-neutral-900">
         {/* NAV */}
-        <nav className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
-          <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-            <div className="flex items-center gap-2 shrink-0">
-              <Activity className="w-4 h-4 text-emerald-600" />
-              <span className="text-sm font-semibold tracking-tight text-neutral-900">AIR&D</span>
-            </div>
-
-            {/* Desktop */}
-            <div className="hidden md:flex items-center gap-7">
-              <div className="flex items-center gap-7 text-sm text-neutral-500">
-                {navLinks.map((link) =>
-                  link.isRoute ? (
-                    <Link key={link.href} href={link.href} className="hover:text-neutral-900 transition-colors">
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a key={link.href} href={link.href} className="hover:text-neutral-900 transition-colors">
-                      {link.label}
-                    </a>
-                  ),
-                )}
+        <div ref={desktopMenuRef} className="relative">
+          <nav
+            className={`sticky top-0 z-[80] transition-colors duration-300 ${
+              desktopMenuOpen
+                ? desktopMenuSurfaceClass
+                : "border-b border-neutral-200 bg-white/80 backdrop-blur-md"
+            }`}
+          >
+            <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
+              <div className="flex shrink-0 items-center gap-2">
+                <Activity className="h-4 w-4 text-emerald-600" />
+                <span className="text-sm font-semibold tracking-tight text-neutral-900">AIR&D</span>
               </div>
-              <div className="flex items-center gap-3">
+
+              {/* Desktop */}
+              <div className="hidden items-center gap-3 md:flex">
                 <button
                   type="button"
                   onClick={openSearch}
@@ -180,12 +247,12 @@ export default function Page() {
                   aria-label="Search"
                 >
                   <Search className="h-3.5 w-3.5" />
-                  <kbd className="hidden sm:inline text-[10px] text-neutral-400">⌘K</kbd>
+                  <kbd className="hidden text-[10px] text-neutral-400 sm:inline">⌘K</kbd>
                 </button>
                 <button
                   type="button"
                   onClick={toggleLocale}
-                  className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors"
+                  className="text-xs text-neutral-400 transition-colors hover:text-neutral-700"
                   aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
                 >
                   <span className={locale === "en" ? "font-semibold text-neutral-900" : ""}>EN</span>
@@ -193,62 +260,227 @@ export default function Page() {
                   <span className={locale === "es" ? "font-semibold text-neutral-900" : ""}>SP</span>
                 </button>
                 <a href="#contact">
-                  <Button size="sm" className="bg-neutral-900 text-white hover:bg-neutral-700 rounded-full h-8 px-4 text-xs font-medium">
+                  <Button size="sm" className="h-8 rounded-full bg-neutral-900 px-4 text-xs font-medium text-white hover:bg-neutral-700">
                     {t.nav.joinUs}
                   </Button>
                 </a>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setDesktopMenuOpen((open) => !open)}
+                  aria-expanded={desktopMenuOpen}
+                  aria-controls="desktop-nav-menu"
+                  className="h-8 rounded-full border-white/55 bg-white/50 px-3 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur-md transition-colors hover:bg-white/80"
+                >
+                  {desktopMenuOpen ? (
+                    <>
+                      Close <X className="ml-1 h-3.5 w-3.5" />
+                    </>
+                  ) : (
+                    <>
+                      Menu <Menu className="ml-1 h-3.5 w-3.5" />
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Mobile */}
+              <div className="flex items-center gap-2 md:hidden">
+                <button type="button" onClick={openSearch} className="p-1.5 text-neutral-500 transition-colors hover:text-neutral-900" aria-label="Search">
+                  <Search className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleLocale}
+                  className="text-xs text-neutral-400 transition-colors hover:text-neutral-700"
+                  aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
+                >
+                  {locale === "en" ? "EN" : "SP"}
+                </button>
+                <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-600">
+                      <Menu className="h-4 w-4" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-72">
+                    <SheetHeader>
+                      <SheetTitle className="flex items-center gap-2">
+                        <Activity className="h-4 w-4 text-emerald-600" />
+                        AIR&D
+                      </SheetTitle>
+                    </SheetHeader>
+                    <nav className="mt-6 flex flex-col gap-4">
+                      {navLinks.map((link) =>
+                        link.isRoute ? (
+                          <Link key={link.href} href={link.href} onClick={() => setSheetOpen(false)} className="text-sm text-neutral-600 transition-colors hover:text-neutral-900">
+                            {link.label}
+                          </Link>
+                        ) : (
+                          <a key={link.href} href={link.href} onClick={() => setSheetOpen(false)} className="text-sm text-neutral-600 transition-colors hover:text-neutral-900">
+                            {link.label}
+                          </a>
+                        ),
+                      )}
+                      <a href="#contact" onClick={() => setSheetOpen(false)}>
+                        <Button size="sm" className="mt-2 h-9 w-full rounded-full bg-neutral-900 text-xs font-medium text-white hover:bg-neutral-700">
+                          {t.nav.joinUs}
+                        </Button>
+                      </a>
+                    </nav>
+                  </SheetContent>
+                </Sheet>
               </div>
             </div>
+          </nav>
 
-            {/* Mobile */}
-            <div className="flex md:hidden items-center gap-2">
-              <button type="button" onClick={openSearch} className="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" aria-label="Search">
-                <Search className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={toggleLocale}
-                className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors"
-                aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
-              >
-                {locale === "en" ? "EN" : "SP"}
-              </button>
-              <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-600">
-                    <Menu className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-72">
-                  <SheetHeader>
-                    <SheetTitle className="flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-emerald-600" />
-                      AIR&D
-                    </SheetTitle>
-                  </SheetHeader>
-                  <nav className="mt-6 flex flex-col gap-4">
-                    {navLinks.map((link) =>
-                      link.isRoute ? (
-                        <Link key={link.href} href={link.href} onClick={() => setSheetOpen(false)} className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                          {link.label}
-                        </Link>
-                      ) : (
-                        <a key={link.href} href={link.href} onClick={() => setSheetOpen(false)} className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
-                          {link.label}
-                        </a>
-                      ),
-                    )}
-                    <a href="#contact" onClick={() => setSheetOpen(false)}>
-                      <Button size="sm" className="w-full bg-neutral-900 text-white hover:bg-neutral-700 rounded-full h-9 text-xs font-medium mt-2">
-                        {t.nav.joinUs}
+          <div
+            id="desktop-nav-menu"
+            className={`fixed inset-x-0 top-14 z-[75] hidden origin-top transition-all duration-500 md:block ${
+              desktopMenuOpen
+                ? "pointer-events-auto translate-y-0 scale-y-100 opacity-100"
+                : "pointer-events-none -translate-y-6 scale-y-95 opacity-0"
+            }`}
+          >
+            <div className={`relative h-[calc(55vh-3.5rem)] min-h-[20.5rem] max-h-[30.5rem] overflow-hidden pb-8 pt-5 shadow-[0_32px_120px_rgba(15,23,42,0.18)] ${desktopMenuSurfaceClass}`}>
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(148,163,184,0.14),transparent_22%),radial-gradient(circle_at_78%_22%,rgba(191,219,254,0.34),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(255,255,255,0.68),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.56),rgba(255,255,255,0.34))]"
+              />
+              <div className="relative mx-auto h-full w-full max-w-[1180px] px-8 lg:px-10">
+                <div className="grid h-full gap-6 lg:grid-cols-[minmax(0,1.22fr)_minmax(280px,0.78fr)]">
+                  <div className="flex h-full flex-col justify-between gap-4">
+                    <div className="flex items-start justify-end gap-6">
+                      <div className="hidden items-center gap-2 lg:flex">
+                        <button
+                          type="button"
+                          onClick={toggleLocale}
+                          className="rounded-full border border-white/60 bg-white/55 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-neutral-600 backdrop-blur-md transition-colors hover:bg-white/78 hover:text-neutral-900"
+                          aria-label={locale === "en" ? "Switch to Spanish" : "Cambiar a inglés"}
+                        >
+                          {locale === "en" ? "Switch to ES" : "Cambiar a EN"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={openSearch}
+                          className="rounded-full border border-white/60 bg-white/55 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-neutral-600 backdrop-blur-md transition-colors hover:bg-white/78 hover:text-neutral-900"
+                        >
+                          Search
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {navLinks.map((link) =>
+                        link.isRoute ? (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setDesktopMenuOpen(false)}
+                            className="group flex items-center gap-3 rounded-2xl px-1 py-0.5 text-[2rem] font-semibold leading-none tracking-tight text-neutral-900/88 transition-colors hover:text-neutral-950 lg:text-[2.35rem]"
+                          >
+                            <span className="h-2.5 w-2.5 rounded-full bg-neutral-900/12 transition-colors group-hover:bg-emerald-500" />
+                            {link.label}
+                          </Link>
+                        ) : (
+                          <a
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setDesktopMenuOpen(false)}
+                            className="group flex items-center gap-3 rounded-2xl px-1 py-0.5 text-[2rem] font-semibold leading-none tracking-tight text-neutral-900/88 transition-colors hover:text-neutral-950 lg:text-[2.35rem]"
+                          >
+                            <span className="h-2.5 w-2.5 rounded-full bg-neutral-900/12 transition-colors group-hover:bg-emerald-500" />
+                            {link.label}
+                          </a>
+                        ),
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-neutral-500">
+                      <span className="rounded-full border border-white/60 bg-white/45 px-3 py-1.5 backdrop-blur-md">
+                        Independent student lab
+                      </span>
+                      <span className="rounded-full border border-white/60 bg-white/45 px-3 py-1.5 backdrop-blur-md">
+                        Quant research + infra
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex h-full flex-col justify-between gap-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <a href="#contact" onClick={() => setDesktopMenuOpen(false)}>
+                        <Button
+                          size="sm"
+                          className="h-10 rounded-full border border-white/60 bg-white/50 px-4 text-xs font-medium text-neutral-800 shadow-none backdrop-blur-md hover:bg-white/78"
+                          variant="outline"
+                        >
+                          {t.nav.joinUs}
+                        </Button>
+                      </a>
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => setDesktopMenuOpen(false)}
+                        className="h-10 rounded-full border border-white/60 bg-neutral-900/88 px-4 text-xs font-medium text-white shadow-none backdrop-blur-md hover:bg-neutral-800"
+                      >
+                        Close <X className="ml-1 h-3.5 w-3.5" />
                       </Button>
-                    </a>
-                  </nav>
-                </SheetContent>
-              </Sheet>
+                    </div>
+
+                    <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
+                      {menuHighlights.map((item, index) =>
+                        item.isRoute ? (
+                          <Link
+                            key={item.title}
+                            href={item.href}
+                            onClick={() => setDesktopMenuOpen(false)}
+                            className="group rounded-[1rem] border border-white/45 bg-white/44 p-1.5 transition-all hover:bg-white/62"
+                          >
+                            <div
+                              className={
+                                index === 0
+                                  ? "aspect-[5.2/1] rounded-[0.7rem] bg-[radial-gradient(circle_at_22%_22%,rgba(16,185,129,0.26),transparent_30%),radial-gradient(circle_at_74%_30%,rgba(191,219,254,0.44),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(229,231,235,0.74))]"
+                                  : "aspect-[5.2/1] rounded-[0.7rem] bg-[radial-gradient(circle_at_70%_30%,rgba(59,130,246,0.18),transparent_25%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(226,232,240,0.72))]"
+                              }
+                            />
+                            <p className="mt-1 text-[7px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                              {item.eyebrow}
+                            </p>
+                            <p className="mt-0.5 text-[11px] font-semibold leading-tight text-neutral-900">{item.title}</p>
+                            <p className="mt-0.5 text-[10px] leading-snug text-neutral-600">{item.body}</p>
+                          </Link>
+                        ) : (
+                          <a
+                            key={item.title}
+                            href={item.href}
+                            target={item.external ? "_blank" : undefined}
+                            rel={item.external ? "noreferrer" : undefined}
+                            onClick={() => setDesktopMenuOpen(false)}
+                            className="group rounded-[1rem] border border-white/45 bg-white/44 p-1.5 transition-all hover:bg-white/62"
+                          >
+                            <div
+                              className={
+                                index === 0
+                                  ? "aspect-[5.2/1] rounded-[0.7rem] bg-[radial-gradient(circle_at_22%_22%,rgba(16,185,129,0.26),transparent_30%),radial-gradient(circle_at_74%_30%,rgba(191,219,254,0.44),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(229,231,235,0.74))]"
+                                  : "aspect-[5.2/1] rounded-[0.7rem] bg-[radial-gradient(circle_at_70%_30%,rgba(59,130,246,0.18),transparent_25%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(226,232,240,0.72))]"
+                              }
+                            />
+                            <p className="mt-1 text-[7px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                              {item.eyebrow}
+                            </p>
+                            <p className="mt-0.5 text-[11px] font-semibold leading-tight text-neutral-900">{item.title}</p>
+                            <p className="mt-0.5 text-[10px] leading-snug text-neutral-600">{item.body}</p>
+                          </a>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </nav>
+        </div>
 
         <div className="max-w-5xl mx-auto px-6">
           {/* HERO */}
