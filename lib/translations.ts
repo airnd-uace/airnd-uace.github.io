@@ -4,6 +4,7 @@ export const translations = {
   en: {
     nav: {
       research: "Research",
+      projects: "Projects",
       team: "Team",
       philosophy: "Philosophy",
       joinUs: "Join Us",
@@ -36,6 +37,12 @@ export const translations = {
       backtestingDesc: "Rigorous simulation with clean, reproducible pipelines.",
       macro: "Macro & Thematic Research",
       macroDesc: "Top-down frameworks for regime identification.",
+    },
+    listings: {
+      researchIntro: "Every research note published by the lab, with tags and dates. Open a card for the full write-up.",
+      projectsIntro: "Every project built or maintained at AIR&D. Open a card for details and contributors.",
+      backHome: "Back to home",
+      viewAllProjects: "View all projects",
     },
     research: {
       title: "Research",
@@ -128,6 +135,7 @@ export const translations = {
   es: {
     nav: {
       research: "Investigación",
+      projects: "Proyectos",
       team: "Equipo",
       philosophy: "Filosofía",
       joinUs: "Únete",
@@ -160,6 +168,12 @@ export const translations = {
       backtestingDesc: "Simulación rigurosa con pipelines limpios y reproducibles.",
       macro: "Investigación Macro y Temática",
       macroDesc: "Marcos de arriba hacia abajo para identificación de regímenes.",
+    },
+    listings: {
+      researchIntro: "Todas las notas de investigación del laboratorio, con etiquetas y fechas. Abre una tarjeta para el artículo completo.",
+      projectsIntro: "Todos los proyectos construidos o mantenidos en AIR&D. Abre una tarjeta para detalles y colaboradores.",
+      backHome: "Volver al inicio",
+      viewAllProjects: "Ver todos los proyectos",
     },
     research: {
       title: "Investigación",

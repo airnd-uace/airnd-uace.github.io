@@ -69,8 +69,8 @@ export default function Page() {
             <div className="hidden md:flex items-center gap-7">
               <div className="flex items-center gap-7 text-sm text-neutral-500">
                 <a href="#about" className="hover:text-neutral-900 transition-colors">{t.about.title}</a>
-                <a href="#research" className="hover:text-neutral-900 transition-colors">{t.nav.research}</a>
-                <a href="#projects" className="hover:text-neutral-900 transition-colors">Projects</a>
+                <Link href="/research" className="hover:text-neutral-900 transition-colors">{t.nav.research}</Link>
+                <Link href="/projects" className="hover:text-neutral-900 transition-colors">{t.nav.projects}</Link>
                 <a href="#team" className="hover:text-neutral-900 transition-colors">{t.nav.team}</a>
                 <a href="#philosophy" className="hover:text-neutral-900 transition-colors">{t.nav.philosophy}</a>
               </div>
@@ -193,8 +193,10 @@ export default function Page() {
           <section id="research" className="py-20 space-y-8">
             <div className="flex items-center justify-between">
               <h2 className="text-3xl font-bold text-neutral-900">{t.research.title}</h2>
-              <Button variant="ghost" size="sm" className="text-neutral-600 hover:text-neutral-900 gap-1 text-xs">
-                {t.research.allPapers} <ExternalLink className="w-3 h-3" />
+              <Button variant="ghost" size="sm" className="text-neutral-600 hover:text-neutral-900 gap-1 text-xs" asChild>
+                <Link href="/research">
+                  {t.research.allPapers} <ExternalLink className="w-3 h-3" />
+                </Link>
               </Button>
             </div>
 
@@ -232,9 +234,11 @@ export default function Page() {
           {/* PROJECTS */}
           <section id="projects" className="py-20 space-y-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-neutral-900">Projects</h2>
-              <Button variant="ghost" size="sm" className="text-neutral-600 hover:text-neutral-900 gap-1 text-xs">
-                View all projects <ExternalLink className="w-3 h-3" />
+              <h2 className="text-3xl font-bold text-neutral-900">{t.nav.projects}</h2>
+              <Button variant="ghost" size="sm" className="text-neutral-600 hover:text-neutral-900 gap-1 text-xs" asChild>
+                <Link href="/projects">
+                  {t.listings.viewAllProjects} <ExternalLink className="w-3 h-3" />
+                </Link>
               </Button>
             </div>
 

@@ -70,11 +70,11 @@ export function ProjectPostClient({ project }: { project: Project }) {
 
       <article className="mx-auto max-w-3xl px-6 py-12">
         <Link
-          href="/#projects"
+          href="/projects"
           className="mb-8 inline-flex items-center gap-1.5 text-sm text-neutral-500 transition-colors hover:text-neutral-900"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          {locale === "en" ? "Projects" : "Proyectos"}
+          {t.nav.projects}
         </Link>
 
         <header className="space-y-4">
