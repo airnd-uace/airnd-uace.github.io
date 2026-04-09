@@ -253,7 +253,7 @@ export function AsciiHeroBackground() {
     >
       <pre
         ref={preRef}
-        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-0 pt-0 text-[15px] leading-[0.86] tracking-[-0.02em] text-black sm:block md:text-[16px] lg:text-[17px]"
+        className="absolute inset-0 m-0 hidden h-full w-full overflow-hidden whitespace-pre px-0 pt-0 text-[17px] leading-[0.9] tracking-[-0.01em] text-black sm:block md:text-[18px] lg:text-[19px]"
         dangerouslySetInnerHTML={{ __html: INITIAL_FRAME_HTML }}
         suppressHydrationWarning
       />
