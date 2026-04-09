@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Activity, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LOCALE_KEY, tagColor } from "@/lib/constants";
@@ -113,6 +113,7 @@ export function ProjectPostClient({ project }: { project: Project }) {
                     className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white py-1.5 pl-1.5 pr-3 text-sm text-neutral-800 transition-colors hover:border-neutral-400"
                   >
                     <Avatar className="h-7 w-7 border border-neutral-200">
+                      {m.image && <AvatarImage src={m.image} alt={m.name} />}
                       <AvatarFallback className="bg-neutral-100 text-[10px] font-medium text-neutral-600">
                         {m.initials}
                       </AvatarFallback>

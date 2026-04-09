@@ -40,6 +40,7 @@ export interface Member {
   bio: string;
   papers: ResearchKey[];
   projects: string[];
+  image?: string;
 }
 
 export const members: Member[] = [

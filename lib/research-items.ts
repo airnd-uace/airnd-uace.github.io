@@ -27,18 +27,59 @@ export const researchByKey = {
   ],
 } as const;
 
-const researchMetaByKey: Record<
-  ResearchKey,
-  { tags: string[]; date: string }
-> = {
-  volatility: { tags: ["Crypto", "Volatility", "ML"], date: "Mar 2025" },
-  momentum: { tags: ["Equities", "Factor", "Macro"], date: "Jan 2025" },
-  microstructure: { tags: ["HFT", "Microstructure"], date: "Nov 2024" },
-  regime: { tags: ["Crypto", "ML"], date: "Sep 2024" },
-  correlation: { tags: ["Equities", "Macro"], date: "Jul 2024" },
-  marketMaking: { tags: ["HFT", "Microstructure"], date: "May 2024" },
-  liquidityRisk: { tags: ["Equities", "Factor"], date: "Feb 2024" },
-  tailRisk: { tags: ["Crypto", "Volatility"], date: "Dec 2023" },
+export interface ResearchMeta {
+  tags: string[];
+  date: string;
+  venue?: string;
+  pdfUrl?: string;
+  bibtex?: string;
+}
+
+const researchMetaByKey: Record<ResearchKey, ResearchMeta> = {
+  volatility: {
+    tags: ["Crypto", "Volatility", "ML"], date: "Mar 2025",
+    venue: "AIR&D Working Paper",
+    pdfUrl: "#",
+    bibtex: `@article{aird2025volatility,\n  title={Volatility Clustering in Crypto Markets},\n  author={Prada, Thomas and Guzmán, Sebastián},\n  journal={AIR&D Working Papers},\n  year={2025}\n}`,
+  },
+  momentum: {
+    tags: ["Equities", "Factor", "Macro"], date: "Jan 2025",
+    venue: "AIR&D Working Paper",
+    pdfUrl: "#",
+    bibtex: `@article{aird2025momentum,\n  title={Momentum Factor Decay Post-2020},\n  author={Chacón, Dilan and Félix, Solange},\n  journal={AIR&D Working Papers},\n  year={2025}\n}`,
+  },
+  microstructure: {
+    tags: ["HFT", "Microstructure"], date: "Nov 2024",
+    venue: "AIR&D Technical Report",
+    pdfUrl: "#",
+    bibtex: `@article{aird2024microstructure,\n  title={Microstructure Signals in Order Books},\n  author={Diaz, Ferney and Solano, Cesar},\n  journal={AIR&D Technical Reports},\n  year={2024}\n}`,
+  },
+  regime: {
+    tags: ["Crypto", "ML"], date: "Sep 2024",
+    venue: "AIR&D Working Paper",
+    pdfUrl: "#",
+    bibtex: `@article{aird2024regime,\n  title={Crypto Regime Detection via Hidden Markov Models},\n  author={Prada, Thomas and Alvarado, Juan Luckas},\n  journal={AIR&D Working Papers},\n  year={2024}\n}`,
+  },
+  correlation: {
+    tags: ["Equities", "Macro"], date: "Jul 2024",
+    venue: "AIR&D Working Paper",
+    bibtex: `@article{aird2024correlation,\n  title={Cross-Asset Correlation Breakdown During Stress},\n  author={Félix, Solange and Ariza, Santiago},\n  journal={AIR&D Working Papers},\n  year={2024}\n}`,
+  },
+  marketMaking: {
+    tags: ["HFT", "Microstructure"], date: "May 2024",
+    venue: "AIR&D Technical Report",
+    bibtex: `@article{aird2024marketmaking,\n  title={Adaptive Market Making with Inventory Constraints},\n  author={Diaz, Ferney and Solano, Cesar},\n  journal={AIR&D Technical Reports},\n  year={2024}\n}`,
+  },
+  liquidityRisk: {
+    tags: ["Equities", "Factor"], date: "Feb 2024",
+    venue: "AIR&D Working Paper",
+    bibtex: `@article{aird2024liquidity,\n  title={Liquidity-Adjusted Factor Returns},\n  author={Chacón, Dilan and Baez, Valentina},\n  journal={AIR&D Working Papers},\n  year={2024}\n}`,
+  },
+  tailRisk: {
+    tags: ["Crypto", "Volatility"], date: "Dec 2023",
+    venue: "AIR&D Working Paper",
+    bibtex: `@article{aird2023tailrisk,\n  title={Tail Risk Hedging in Crypto Derivatives},\n  author={Prada, Thomas and Ariza, Santiago and Rodriguez, Camilo},\n  journal={AIR&D Working Papers},\n  year={2023}\n}`,
+  },
 };
 
 export const RESEARCH_SLUGS = Object.keys(researchMetaByKey) as ResearchKey[];

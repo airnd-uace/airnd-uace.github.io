@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Activity, ArrowLeft } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Activity, ArrowLeft, Download, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LOCALE_KEY, tagColor } from "@/lib/constants";
 import type { ResearchKey } from "@/lib/members";
@@ -15,6 +15,7 @@ import { translations, type Locale } from "@/lib/translations";
 
 export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }) {
   const [locale, setLocale] = useState<Locale>("en");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(LOCALE_KEY) as Locale | null;
@@ -42,6 +43,13 @@ export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }
         ];
 
   const kindLabel = locale === "en" ? "Research" : "Investigación";
+
+  const handleCopyBibtex = async () => {
+    if (!meta.bibtex) return;
+    await navigator.clipboard.writeText(meta.bibtex);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <main className="min-h-screen bg-neutral-50 text-neutral-900">
@@ -85,6 +93,11 @@ export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }
             <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/10 text-emerald-700">
               {kindLabel}
             </Badge>
+            {meta.venue && (
+              <Badge variant="outline" className="border-amber-500/40 bg-amber-500/10 text-amber-700">
+                {meta.venue}
+              </Badge>
+            )}
             <span className="text-sm text-neutral-500">{meta.date}</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl">{paper.title}</h1>
@@ -99,6 +112,37 @@ export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }
               </Badge>
             ))}
           </div>
+
+          {(meta.pdfUrl || meta.bibtex) && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {meta.pdfUrl && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1.5 rounded-full border-neutral-300 px-4 text-xs"
+                  asChild
+                >
+                  <a href={meta.pdfUrl} target="_blank" rel="noreferrer">
+                    <Download className="h-3.5 w-3.5" />
+                    PDF
+                  </a>
+                </Button>
+              )}
+              {meta.bibtex && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1.5 rounded-full border-neutral-300 px-4 text-xs"
+                  onClick={handleCopyBibtex}
+                >
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied
+                    ? locale === "en" ? "Copied!" : "¡Copiado!"
+                    : "BibTeX"}
+                </Button>
+              )}
+            </div>
+          )}
         </header>
 
         <Separator className="my-10 bg-neutral-200" />
@@ -116,6 +160,7 @@ export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }
                     className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white py-1.5 pl-1.5 pr-3 text-sm text-neutral-800 transition-colors hover:border-neutral-400"
                   >
                     <Avatar className="h-7 w-7 border border-neutral-200">
+                      {m.image && <AvatarImage src={m.image} alt={m.name} />}
                       <AvatarFallback className="bg-neutral-100 text-[10px] font-medium text-neutral-600">
                         {m.initials}
                       </AvatarFallback>
@@ -142,7 +187,7 @@ export function ResearchPostClient({ researchKey }: { researchKey: ResearchKey }
             <Activity className="h-3.5 w-3.5 text-emerald-600" />
             <span className="text-xs text-neutral-600">{t.footer.company}</span>
           </Link>
-          <p className="text-xs text-neutral-500">© 2025</p>
+          <p className="text-xs text-neutral-500">&copy; 2025</p>
         </div>
       </footer>
     </main>

@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -96,6 +96,7 @@ export function MemberProfileClient({ member }: { member: Member }) {
 
           <section className="flex flex-col items-start gap-8 md:flex-row">
             <Avatar className="h-24 w-24 shrink-0 border-2 border-neutral-200">
+              {member.image && <AvatarImage src={member.image} alt={member.name} />}
               <AvatarFallback className="bg-neutral-100 text-2xl font-semibold text-neutral-600">
                 {member.initials}
               </AvatarFallback>

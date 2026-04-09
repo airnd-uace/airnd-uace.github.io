@@ -128,8 +128,21 @@ export const translations = {
       applyNow: "Apply Now",
       contact: "Contact",
     },
+    news: {
+      title: "News & Updates",
+      viewAll: "All updates",
+    },
+    openSource: {
+      title: "Open Source & Datasets",
+      desc: "Tools and data we've released to the community.",
+    },
     footer: {
       company: "Alternative investments, Research and Development",
+      tagline: "Independent, student-run quantitative research lab.",
+      quickLinks: "Quick Links",
+      social: "Social",
+      legal: "Legal",
+      copyright: "All rights reserved.",
     },
   },
   es: {
@@ -260,8 +273,21 @@ export const translations = {
       applyNow: "Aplicar Ahora",
       contact: "Contacto",
     },
+    news: {
+      title: "Noticias y Actualizaciones",
+      viewAll: "Todas las actualizaciones",
+    },
+    openSource: {
+      title: "Open Source y Datasets",
+      desc: "Herramientas y datos que hemos liberado a la comunidad.",
+    },
     footer: {
       company: "Inversiones alternativas, Investigación y Desarrollo",
+      tagline: "Laboratorio de investigación cuantitativa independiente, dirigido por estudiantes.",
+      quickLinks: "Enlaces Rápidos",
+      social: "Social",
+      legal: "Legal",
+      copyright: "Todos los derechos reservados.",
     },
   },
 } as const;
